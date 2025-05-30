@@ -6,9 +6,8 @@
   <title>EHCB Bestell-App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: sans-serif; padding: 1em; max-width: 900px; margin: auto; }
-    .logo { text-align: center; margin-bottom: 2em; }
-    .logo img { max-height: 100px; }
+    body { font-family: sans-serif; padding: 1em; max-width: 960px; margin: auto; }
+    .logo img { max-height: 90px; }
     .product-card {
       display: flex; gap: 1em; border: 1px solid #ccc; border-radius: 10px;
       padding: 1em; margin-bottom: 1em; box-shadow: 0 0 5px rgba(0,0,0,0.1);
@@ -16,8 +15,9 @@
     .product-card img { width: 100px; height: 100px; object-fit: contain; }
     .variant-line { margin-top: 0.5em; }
     .cart-preview { margin-top: 2em; border-top: 2px solid #000; padding-top: 1em; }
-    .twint-box img { max-width: 100%; margin-top: 2em; }
-    ul { padding-left: 20px; }
+    .twint-box img { max-width: 300px; display: block; margin: 1em auto; }
+    #adminArea { display: none; margin-top: 2em; border-top: 2px dashed #888; padding-top: 1em; }
+    textarea { width: 100%; height: 400px; font-family: monospace; }
   </style>
 </head>
 <body>
@@ -25,32 +25,41 @@
     <img src="EHCB_Sponser_logo.png" alt="EHCB Sponser Logo">
   </div>
   <h1>EHCB Bestellformular</h1>
-  <form id="orderForm" action="https://formsubmit.co/n.guyaz@icloud.com" method="POST">
-    <label>Name:</label><br>
-    <input type="text" name="name" required><br>
-    <label>E-Mail:</label><br>
-    <input type="email" name="email" required><br><br>
-    <div id="products"></div>
-    <label>Bemerkung:</label><br>
-    <textarea name="note"></textarea><br><br>
+  <label>Name:</label><br>
+  <input type="text" id="name" required><br>
+  <label>E-Mail:</label><br>
+  <input type="email" id="email" required><br><br>
+  <div id="products"></div>
+  <label>Bemerkung:</label><br>
+  <textarea id="note"></textarea><br><br>
 
-    <div class="cart-preview">
-      <h3>🛒 Übersicht der Bestellung</h3>
-      <ul id="cartList"></ul>
-    </div>
-
-    <input type="hidden" name="_subject" value="Neue EHCB Bestellung">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="orderItems" id="orderItemsInput" />
-
-    <button type="submit">Bestellung absenden</button>
-  </form>
+  <div class="cart-preview">
+    <h3>🛒 Übersicht der Bestellung</h3>
+    <ul id="cartList"></ul>
+    <button onclick="saveOrder()">💾 Bestellung lokal speichern</button>
+  </div>
 
   <div class="twint-box">
     <h3>💳 Zahlung mit TWINT</h3>
-    <p>Scannen Sie den QR-Code unten, um den Totalbetrag zu begleichen.</p>
+    <p>Scanne den Code unten:</p>
     <img src="twint_qr.png" alt="TWINT QR">
+  </div>
+
+  <hr>
+  <h3 onclick="toggleAdmin()">🛠 Admin bearbeiten (Passwort erforderlich)</h3>
+  <div id="adminArea">
+    <label>Passwort:</label>
+    <input type="password" id="pwInput">
+    <button onclick="checkPw()">Login</button>
+    <div id="editorSection" style="display:none">
+      <h4>Produktdaten bearbeiten</h4>
+      <textarea id="productJson"></textarea><br>
+      <button onclick="saveProducts()">Speichern</button>
+      <button onclick="resetProducts()">Zurücksetzen</button>
+      <h4>Bestellungen (letzte 7 Tage)</h4>
+      <ul id="orderList"></ul>
+      <button onclick="exportCSV()">⬇️ CSV exportieren</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
