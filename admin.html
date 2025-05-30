@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>EHCB Admin – Produkte bearbeiten</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: sans-serif; max-width: 900px; margin: auto; padding: 2em; }
+    #editor, #login { display: none; }
+    textarea { width: 100%; height: 400px; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <h1>Adminbereich – Produkteditor</h1>
+  <div id="login">
+    <label>Passwort: <input type="password" id="pw" /></label>
+    <button onclick="checkPw()">Login</button>
+  </div>
+
+  <div id="editor">
+    <p>🔧 Du kannst hier die Produktdaten bearbeiten. Änderungen werden im Browser gespeichert.</p>
+    <textarea id="productJson"></textarea><br><br>
+    <button onclick="save()">💾 Speichern</button>
+    <button onclick="reset()">⛔ Zurücksetzen</button>
+  </div>
+
+  <script>
+    const pass = "ehcbadmin";
+    const key = "ehcb_products";
+
+    function checkPw() {
+      if (document.getElementById("pw").value === pass) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("editor").style.display = "block";
+        const saved = localStorage.getItem(key);
+        document.getElementById("productJson").value = saved || "";
+      } else {
+        alert("Falsches Passwort");
+      }
+    }
+
+    function save() {
+      localStorage.setItem(key, document.getElementById("productJson").value);
+      alert("Gespeichert!");
+    }
+
+    function reset() {
+      localStorage.removeItem(key);
+      document.getElementById("productJson").value = "";
+      alert("Zurückgesetzt.");
+    }
+
+    document.getElementById("login").style.display = "block";
+  </script>
+</body>
+</html>

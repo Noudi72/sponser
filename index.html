@@ -16,6 +16,7 @@
     .product-card img { width: 100px; height: 100px; object-fit: contain; }
     .variant-line { margin-top: 0.5em; }
     .cart-preview { margin-top: 2em; border-top: 2px solid #000; padding-top: 1em; }
+    .twint-box img { max-width: 100%; margin-top: 2em; }
     ul { padding-left: 20px; }
   </style>
 </head>
@@ -45,6 +46,13 @@
 
     <button type="submit">Bestellung absenden</button>
   </form>
+
+  <div class="twint-box">
+    <h3>💳 Zahlung mit TWINT</h3>
+    <p>Scannen Sie den QR-Code unten, um den Totalbetrag zu begleichen.</p>
+    <img src="twint_qr.png" alt="TWINT QR">
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
