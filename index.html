@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>EHCB Bestell-App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: sans-serif; padding: 1em; max-width: 900px; margin: auto; }
+    .logo { text-align: center; margin-bottom: 2em; }
+    .logo img { max-height: 100px; }
+    .product-card {
+      display: flex; gap: 1em; border: 1px solid #ccc; border-radius: 10px;
+      padding: 1em; margin-bottom: 1em; box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .product-card img { width: 100px; height: 100px; object-fit: contain; }
+    .variant-line { margin-top: 0.5em; }
+    .cart-preview { margin-top: 2em; border-top: 2px solid #000; padding-top: 1em; }
+    ul { padding-left: 20px; }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="EHCB_Sponser_logo.png" alt="EHCB Sponser Logo">
+  </div>
+  <h1>EHCB Bestellformular</h1>
+  <form id="orderForm" action="https://formsubmit.co/n.guyaz@icloud.com" method="POST">
+    <label>Name:</label><br>
+    <input type="text" name="name" required><br>
+    <label>E-Mail:</label><br>
+    <input type="email" name="email" required><br><br>
+    <div id="products"></div>
+    <label>Bemerkung:</label><br>
+    <textarea name="note"></textarea><br><br>
+
+    <div class="cart-preview">
+      <h3>🛒 Übersicht der Bestellung</h3>
+      <ul id="cartList"></ul>
+    </div>
+
+    <input type="hidden" name="_subject" value="Neue EHCB Bestellung">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="orderItems" id="orderItemsInput" />
+
+    <button type="submit">Bestellung absenden</button>
+  </form>
+  <script src="script.js"></script>
+</body>
+</html>
