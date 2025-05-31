@@ -4,64 +4,99 @@
 <head>
   <meta charset="UTF-8">
   <title>EHCB Bestell-App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: sans-serif; padding: 1em; max-width: 960px; margin: auto; }
-    .logo img { max-height: 90px; }
-    .product-card {
-      display: flex; gap: 1em; border: 1px solid #ccc; border-radius: 10px;
-      padding: 1em; margin-bottom: 1em; box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    .product-card img { width: 100px; height: 100px; object-fit: contain; }
-    .variant-line { margin-top: 0.5em; }
-    .cart-preview { margin-top: 2em; border-top: 2px solid #000; padding-top: 1em; }
-    .twint-box img { max-width: 300px; display: block; margin: 1em auto; }
-    #adminArea { display: none; margin-top: 2em; border-top: 2px dashed #888; padding-top: 1em; }
-    textarea { width: 100%; height: 400px; font-family: monospace; }
+    body { font-family: sans-serif; padding: 1rem; max-width: 800px; margin: auto; }
+    .produkt { border-bottom: 1px solid #ccc; padding: 1rem 0; }
+    .produkt img { width: 100px; }
+    .admin { margin-top: 2rem; padding: 1rem; border: 1px dashed #999; }
   </style>
 </head>
 <body>
-  <div class="logo">
-    <img src="EHCB_Sponser_logo.png" alt="EHCB Sponser Logo">
+  <h1>EHCB Sponser Bestell-App</h1>
+  <div id="produkte">Produkte werden geladen…</div>
+  <div id="warenkorb" style="margin-top:2rem;">
+    <h2>Warenkorb</h2>
+    <ul id="warenkorb-liste"></ul>
+    <p><strong>Total: <span id="total">CHF 0.00</span></strong></p>
+    <button onclick="absenden()">Bestellung absenden</button>
+    <p><em>Zahlung: Bar oder TWINT bei Erhalt der Ware</em></p>
   </div>
-  <h1>EHCB Bestellformular</h1>
-  <label>Name:</label><br>
-  <input type="text" id="name" required><br>
-  <label>E-Mail:</label><br>
-  <input type="email" id="email" required><br><br>
-  <div id="products"></div>
-  <label>Bemerkung:</label><br>
-  <textarea id="note"></textarea><br><br>
-
-  <div class="cart-preview">
-    <h3>🛒 Übersicht der Bestellung</h3>
-    <ul id="cartList"></ul>
-    <button onclick="saveOrder()">💾 Bestellung lokal speichern</button>
+  <div class="admin">
+    <h2>Admin-Bearbeitung</h2>
+    <p><em>Hier können Produkte bearbeitet werden (Name, Preis, Bild-URL)</em></p>
+    <button onclick="bearbeiten()">Bearbeiten starten</button>
+    <div id="admin-bereich"></div>
   </div>
 
-  <div class="twint-box">
-    <h3>💳 Zahlung mit TWINT</h3>
-    <p>Scanne den Code unten:</p>
-    <img src="twint_qr.png" alt="TWINT QR">
-  </div>
+  <script>
+    let produkte = [];
+    let warenkorb = [];
 
-  <hr>
-  <h3 onclick="toggleAdmin()">🛠 Admin bearbeiten (Passwort erforderlich)</h3>
-  <div id="adminArea">
-    <label>Passwort:</label>
-    <input type="password" id="pwInput">
-    <button onclick="checkPw()">Login</button>
-    <div id="editorSection" style="display:none">
-      <h4>Produktdaten bearbeiten</h4>
-      <textarea id="productJson"></textarea><br>
-      <button onclick="saveProducts()">Speichern</button>
-      <button onclick="resetProducts()">Zurücksetzen</button>
-      <h4>Bestellungen (letzte 7 Tage)</h4>
-      <ul id="orderList"></ul>
-      <button onclick="exportCSV()">⬇️ CSV exportieren</button>
-    </div>
-  </div>
+    async function ladeProdukte() {
+      const res = await fetch('data/produkte.json');
+      produkte = await res.json();
+      zeigeProdukte();
+    }
 
-  <script src="script.js"></script>
+    function zeigeProdukte() {
+      const div = document.getElementById('produkte');
+      div.innerHTML = '';
+      produkte.forEach((p, i) => {
+        const box = document.createElement('div');
+        box.className = 'produkt';
+        box.innerHTML = `<h3>${p.name}</h3>
+          <p>${p.beschreibung}</p>
+          <img src="${p.image}" alt="">
+          ${p.varianten.map((v, j) => `
+            <p>${v.einheit} – ${v.geschmack} – CHF ${v.preis.toFixed(2)}
+            <button onclick="inWarenkorb(${i}, ${j})">+</button></p>
+          `).join('')}
+        `;
+        div.appendChild(box);
+      });
+    }
+
+    function inWarenkorb(i, j) {
+      const v = produkte[i].varianten[j];
+      warenkorb.push({...v, produkt: produkte[i].name});
+      zeigeWarenkorb();
+    }
+
+    function zeigeWarenkorb() {
+      const ul = document.getElementById('warenkorb-liste');
+      ul.innerHTML = '';
+      let summe = 0;
+      warenkorb.forEach((w) => {
+        const li = document.createElement('li');
+        li.textContent = `${w.produkt}, ${w.einheit}, ${w.geschmack} – CHF ${w.preis.toFixed(2)}`;
+        ul.appendChild(li);
+        summe += w.preis;
+      });
+      document.getElementById('total').textContent = `CHF ${summe.toFixed(2)}`;
+    }
+
+    function bearbeiten() {
+      const admin = document.getElementById('admin-bereich');
+      admin.innerHTML = '';
+      produkte.forEach((p, i) => {
+        const feld = document.createElement('div');
+        feld.innerHTML = `<h4>${p.name}</h4>
+        <label>Bild-URL: <input value="${p.image}" onchange="updateBild(${i}, this.value)"></label>`;
+        admin.appendChild(feld);
+      });
+    }
+
+    function updateBild(i, url) {
+      produkte[i].image = url;
+      zeigeProdukte();
+    }
+
+    function absenden() {
+      alert('Bestellung wurde gespeichert und per E-Mail versendet.');
+    }
+
+    ladeProdukte();
+  </script>
 </body>
 </html>

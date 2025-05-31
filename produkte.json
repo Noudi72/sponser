@@ -1,0 +1,174 @@
+[
+  {
+    "name": "Whey Isolate 94",
+    "beschreibung": "Hochwertiges Eiweisspulver mit schneller Verfügbarkeit",
+    "image": "https://via.placeholder.com/100?text=Whey+94",
+    "varianten": [
+      {
+        "einheit": "Dose 425g",
+        "geschmack": "Vanille",
+        "preis": 36.0
+      },
+      {
+        "einheit": "Dose 425g",
+        "geschmack": "Schokolade",
+        "preis": 36.0
+      },
+      {
+        "einheit": "Dose 850g",
+        "geschmack": "Vanille",
+        "preis": 58.0
+      },
+      {
+        "einheit": "Dose 850g",
+        "geschmack": "Schokolade",
+        "preis": 58.0
+      },
+      {
+        "einheit": "Dose 1500g",
+        "geschmack": "Vanille",
+        "preis": 89.0
+      }
+    ]
+  },
+  {
+    "name": "Recovery Shake",
+    "beschreibung": "Kohlenhydrat-Protein-Shake für schnelle Erholung",
+    "image": "https://via.placeholder.com/100?text=Recovery",
+    "varianten": [
+      {
+        "einheit": "Dose 1200g",
+        "geschmack": "Vanille",
+        "preis": 54.0
+      },
+      {
+        "einheit": "Dose 1200g",
+        "geschmack": "Banane",
+        "preis": 54.0
+      },
+      {
+        "einheit": "Dose 1200g",
+        "geschmack": "Schokolade",
+        "preis": 54.0
+      }
+    ]
+  },
+  {
+    "name": "Protein Bar 50",
+    "beschreibung": "50g Riegel mit 27% Eiweiss",
+    "image": "https://via.placeholder.com/100?text=Bar+50",
+    "varianten": [
+      {
+        "einheit": "Riegel 50g",
+        "geschmack": "Coconut",
+        "preis": 2.6
+      },
+      {
+        "einheit": "Riegel 50g",
+        "geschmack": "Vanille",
+        "preis": 2.6
+      }
+    ]
+  },
+  {
+    "name": "High Energy Bar",
+    "beschreibung": "Kohlenhydratriegel für lange Ausdauerbelastungen",
+    "image": "https://via.placeholder.com/100?text=Energy+Bar",
+    "varianten": [
+      {
+        "einheit": "Riegel 45g",
+        "geschmack": "Apricot",
+        "preis": 2.5
+      },
+      {
+        "einheit": "Riegel 45g",
+        "geschmack": "Salty Peanut",
+        "preis": 2.5
+      }
+    ]
+  },
+  {
+    "name": "Protein Low Carb Bar",
+    "beschreibung": "Eiweissriegel mit reduziertem Kohlenhydratanteil",
+    "image": "https://via.placeholder.com/100?text=Low+Carb",
+    "varianten": [
+      {
+        "einheit": "Riegel 35g",
+        "geschmack": "Stracciatella",
+        "preis": 2.8
+      }
+    ]
+  },
+  {
+    "name": "Liquid Energy Plus",
+    "beschreibung": "Flüssiggel mit Koffein",
+    "image": "https://via.placeholder.com/100?text=Energy+Plus",
+    "varianten": [
+      {
+        "einheit": "Tube 70g",
+        "geschmack": "Cola",
+        "preis": 3.5
+      }
+    ]
+  },
+  {
+    "name": "Liquid Energy BCAA",
+    "beschreibung": "Flüssiggel mit Aminosäuren",
+    "image": "https://via.placeholder.com/100?text=Energy+BCAA",
+    "varianten": [
+      {
+        "einheit": "Tube 70g",
+        "geschmack": "Fruit Mix",
+        "preis": 3.5
+      }
+    ]
+  },
+  {
+    "name": "Electrolytes Tabs",
+    "beschreibung": "Brausetabletten zur Mineralstoffversorgung",
+    "image": "https://via.placeholder.com/100?text=Tabs",
+    "varianten": [
+      {
+        "einheit": "Dose 10 Tabs",
+        "geschmack": "Lemon",
+        "preis": 9.9
+      }
+    ]
+  },
+  {
+    "name": "Magnesium Liquid",
+    "beschreibung": "Magnesium zur Unterstützung der Muskelfunktion",
+    "image": "https://via.placeholder.com/100?text=Magnesium",
+    "varianten": [
+      {
+        "einheit": "Ampulle 25ml",
+        "geschmack": "Orange",
+        "preis": 2.0
+      }
+    ]
+  },
+  {
+    "name": "Power Gums",
+    "beschreibung": "Gummibonbons mit Kohlenhydraten",
+    "image": "https://via.placeholder.com/100?text=Gums",
+    "varianten": [
+      {
+        "einheit": "Pack 10 Stk.",
+        "geschmack": "Cola",
+        "preis": 2.8
+      }
+    ]
+  },
+  {
+    "name": "Competition",
+    "beschreibung": "Sportgetränk für intensive Belastungen",
+    "image": "https://via.placeholder.com/100?text=Competition",
+    "varianten": [
+      {
+        "einheit": "Beutel 60g",
+        "geschmack": "Fruit Mix",
+        "preis": 2.5
+      }
+    ]
+  }
+]
