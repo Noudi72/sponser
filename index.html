@@ -2,14 +2,16 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>EHCB Bestell-App</title>
+  <meta charset="UTF-8" />
+  <title>EHCB Sponser Bestell-App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { font-family: sans-serif; padding: 1rem; max-width: 800px; margin: auto; }
     .produkt { border-bottom: 1px solid #ccc; padding: 1rem 0; }
     .produkt img { width: 100px; }
     .admin { margin-top: 2rem; padding: 1rem; border: 1px dashed #999; }
+    input { margin: 0.2rem 0; }
+    textarea { width: 100%; height: 3em; }
   </style>
 </head>
 <body>
@@ -24,79 +26,90 @@
   </div>
   <div class="admin">
     <h2>Admin-Bearbeitung</h2>
-    <p><em>Hier können Produkte bearbeitet werden (Name, Preis, Bild-URL)</em></p>
     <button onclick="bearbeiten()">Bearbeiten starten</button>
     <div id="admin-bereich"></div>
   </div>
 
-  <script>
-    let produkte = [];
-    let warenkorb = [];
+<script>
+let produkte = [];
+let warenkorb = [];
 
-    async function ladeProdukte() {
-      const res = await fetch('data/produkte.json');
-      produkte = await res.json();
-      zeigeProdukte();
-    }
+async function ladeProdukte() {
+  const res = await fetch('produkte.json');
+  produkte = await res.json();
+  const gespeicherte = localStorage.getItem('produkte_admin');
+  if (gespeicherte) produkte = JSON.parse(gespeicherte);
+  zeigeProdukte();
+}
 
-    function zeigeProdukte() {
-      const div = document.getElementById('produkte');
-      div.innerHTML = '';
-      produkte.forEach((p, i) => {
-        const box = document.createElement('div');
-        box.className = 'produkt';
-        box.innerHTML = `<h3>${p.name}</h3>
-          <p>${p.beschreibung}</p>
-          <img src="${p.image}" alt="">
-          ${p.varianten.map((v, j) => `
-            <p>${v.einheit} – ${v.geschmack} – CHF ${v.preis.toFixed(2)}
-            <button onclick="inWarenkorb(${i}, ${j})">+</button></p>
-          `).join('')}
-        `;
-        div.appendChild(box);
-      });
-    }
+function zeigeProdukte() {
+  const div = document.getElementById('produkte');
+  div.innerHTML = '';
+  produkte.forEach((p, i) => {
+    const box = document.createElement('div');
+    box.className = 'produkt';
+    box.innerHTML = `<h3>${p.name}</h3>
+      <p>${p.beschreibung}</p>
+      <img src="${p.image}" alt="">
+      ${p.varianten.map((v, j) => `
+        <p>${v.einheit} – ${v.geschmack} – CHF ${v.preis.toFixed(2)}
+        <button onclick="inWarenkorb(${i}, ${j})">+</button></p>
+      `).join('')}
+    `;
+    div.appendChild(box);
+  });
+}
 
-    function inWarenkorb(i, j) {
-      const v = produkte[i].varianten[j];
-      warenkorb.push({...v, produkt: produkte[i].name});
-      zeigeWarenkorb();
-    }
+function inWarenkorb(i, j) {
+  const v = produkte[i].varianten[j];
+  warenkorb.push({...v, produkt: produkte[i].name});
+  zeigeWarenkorb();
+}
 
-    function zeigeWarenkorb() {
-      const ul = document.getElementById('warenkorb-liste');
-      ul.innerHTML = '';
-      let summe = 0;
-      warenkorb.forEach((w) => {
-        const li = document.createElement('li');
-        li.textContent = `${w.produkt}, ${w.einheit}, ${w.geschmack} – CHF ${w.preis.toFixed(2)}`;
-        ul.appendChild(li);
-        summe += w.preis;
-      });
-      document.getElementById('total').textContent = `CHF ${summe.toFixed(2)}`;
-    }
+function zeigeWarenkorb() {
+  const ul = document.getElementById('warenkorb-liste');
+  ul.innerHTML = '';
+  let summe = 0;
+  warenkorb.forEach((w) => {
+    const li = document.createElement('li');
+    li.textContent = `${w.produkt}, ${w.einheit}, ${w.geschmack} – CHF ${w.preis.toFixed(2)}`;
+    ul.appendChild(li);
+    summe += w.preis;
+  });
+  document.getElementById('total').textContent = `CHF ${summe.toFixed(2)}`;
+}
 
-    function bearbeiten() {
-      const admin = document.getElementById('admin-bereich');
-      admin.innerHTML = '';
-      produkte.forEach((p, i) => {
-        const feld = document.createElement('div');
-        feld.innerHTML = `<h4>${p.name}</h4>
-        <label>Bild-URL: <input value="${p.image}" onchange="updateBild(${i}, this.value)"></label>`;
-        admin.appendChild(feld);
-      });
-    }
+function bearbeiten() {
+  const admin = document.getElementById('admin-bereich');
+  admin.innerHTML = '';
+  produkte.forEach((p, i) => {
+    const feld = document.createElement('div');
+    feld.innerHTML = `
+      <h4>${p.name}</h4>
+      <label>Bild-URL: <input value="${p.image}" onchange="updateProdukt(${i}, 'image', this.value)"></label><br>
+      <label>Beschreibung:<br><textarea onchange="updateProdukt(${i}, 'beschreibung', this.value)">${p.beschreibung}</textarea></label><br>
+    `;
+    admin.appendChild(feld);
+  });
+  const speichernBtn = document.createElement('button');
+  speichernBtn.textContent = "Änderungen speichern";
+  speichernBtn.onclick = () => {
+    localStorage.setItem('produkte_admin', JSON.stringify(produkte));
+    alert("Gespeichert!");
+    zeigeProdukte();
+  };
+  admin.appendChild(speichernBtn);
+}
 
-    function updateBild(i, url) {
-      produkte[i].image = url;
-      zeigeProdukte();
-    }
+function updateProdukt(i, feld, wert) {
+  produkte[i][feld] = wert;
+}
 
-    function absenden() {
-      alert('Bestellung wurde gespeichert und per E-Mail versendet.');
-    }
+function absenden() {
+  alert("Bestellung wurde gespeichert und per E-Mail versendet.");
+}
 
-    ladeProdukte();
-  </script>
+ladeProdukte();
+</script>
 </body>
 </html>
